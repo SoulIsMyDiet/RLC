@@ -15,7 +15,9 @@ class NullCapacitorException extends \Exception
     /**
      * NullCapacitorException constructor.
      */
-    public function __construct()
+    public function __construct($message)
     {
+        parent::__construct($message);
+
     }
 }

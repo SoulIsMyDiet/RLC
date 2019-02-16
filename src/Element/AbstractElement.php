@@ -8,7 +8,7 @@ namespace Recruitment\Element;
  * Class AbstractElement
  * @package Recruitment\Element
  */
-class AbstractElement
+abstract class AbstractElement
 {
 
 

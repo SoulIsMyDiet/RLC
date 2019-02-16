@@ -1,65 +1,126 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anzelm
- * Date: 15.02.19
- * Time: 21:31
- */
+
 
 namespace Recruitment\Circuit;
 
 
+use InvalidArgumentException;
 use Recruitment\Calculator;
 use Recruitment\Element\AbstractElement;
+use Recruitment\Exception\UnsupportedElementException;
 
+/**
+ * Class Element
+ * @package Recruitment\Circuit
+ */
 class Element
 {
     const TYPE_SERIAL = 'S';
     const TYPE_PARALLEL = 'P';
 
-    private $elementType;
+    /**
+     * @var string
+     */
+    private $connectionType;
+    /**
+     * @var string
+     */
     private $abstractType;
-    private $elementsSet = [];
+    /**
+     * @var array
+     */
+    private $elementsInSet = [];
+    /**
+     * @var Calculator
+     */
     private $calculator;
+    private $setsValue;
+
+    /**
+     * @return mixed
+     */
+    public function getSetsValue()
+    {
+        return $this->setsValue;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getAbstractType()
+    {
+        return $this->abstractType;
+    }
 
     /**
      * Element constructor.
-     * @param string $type
+     * @param string $connectionType
      * @param string $abstractType
      */
-    public function __construct($type, $abstractType)
+    public function __construct($connectionType, $abstractType)
     {
-        $this->elementType = $type;
+        $elementReflection = new \ReflectionClass(self::class);
+        if (!in_array($connectionType, $elementReflection->getConstants())) {
+            throw new InvalidArgumentException;
+        }
+        $abstractElementReflection = new \ReflectionClass(AbstractElement::class);
+        if (!in_array($abstractType, $abstractElementReflection->getConstants())) {
+            throw new InvalidArgumentException;
+        }
+
+        $this->connectionType = $connectionType;
         $this->abstractType = $abstractType;
         $this->calculator = new Calculator();
     }
 
-    public function attach(AbstractElement $item1)
+    /**
+     * @param AbstractElement $element
+     * @return $this
+     * @throws UnsupportedElementException
+     */
+    public function attach(AbstractElement $element)
     {
-        $this->elementsSet[] = $item1->getValue();
+        if ($element->getType() !== $this->abstractType) {
+            throw new UnsupportedElementException('what?');
+        }
+        $this->elementsInSet[] = $element->getValue();
         return $this;
     }
 
+    /**
+     * Dependly on element-connection and type of elements, calculate value for this elements set
+     */
     public function calculate()
     {
-        switch ($this->abstractType){
+        switch ($this->abstractType) {
             case AbstractElement::TYPE_RESISTANCE:
             case AbstractElement::TYPE_INDUCTION:
-if($this->elementType == self::TYPE_SERIAL){
-$this->calculator->strait($this->elementsSet);
-}else{
-    $this->calculator->reciprocal($this->elementsSet);
-}
-break;
+                if ($this->connectionType == self::TYPE_SERIAL) {
+                   $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
+                } else {
+                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
+
+                }
+                break;
             case AbstractElement::TYPE_CAPACITY:
-                if($this->elementType == self::TYPE_SERIAL){
-                    $this->calculator->reciprocal($this->elementsSet);
-                }else{
-                    $this->calculator->strait($this->elementsSet);
+                if ($this->connectionType == self::TYPE_SERIAL) {
+                    //$this->calculator->reciprocal($this->elementsSet);
+                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
+
+                } else {
+                   // $this->calculator->strait($this->elementsSet);
+                    $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
+
                 }
                 break;
             Default:
+                throw new InvalidArgumentException;
+                break;
 
         }
+        $this->setsValue = $result;
+        //echo $result.'lol';
+        return $result;
     }
 }
