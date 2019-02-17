@@ -3,8 +3,6 @@
 namespace Recruitment\Element;
 
 
-
-
 use Recruitment\Exception\NullCapacitorException;
 
 /**
@@ -13,10 +11,7 @@ use Recruitment\Exception\NullCapacitorException;
  */
 class Capacitor extends AbstractElement
 {
-    /**
-     * @var int
-     */
-    //private $value;
+
     /**
      * @var string
      */
@@ -29,7 +24,6 @@ class Capacitor extends AbstractElement
      */
     public function __construct($value)
     {
-        //Parent::__construct($value);
         $this->capacitorValidator($value);
         $this->value = $value;
     }
@@ -40,10 +34,10 @@ class Capacitor extends AbstractElement
      */
     private function capacitorValidator($value)
     {
-        if($value < 0){
+        if ($value < 0) {
             throw new \InvalidArgumentException('The capacitor can not have negative value');
         }
-        if ($value == null){
+        if ($value == null) {
             throw new NullCapacitorException('The capacitor can not be empty');
         }
     }

@@ -19,6 +19,19 @@ class Element
     const TYPE_PARALLEL = 'P';
 
     /**
+     * Array of which calculation we should use in case of element type and connection type
+     *
+     * @var array
+     */
+    public static $howToCalculate = [
+        'strait' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_SERIAL,
+            AbstractElement::TYPE_INDUCTION => Element::TYPE_SERIAL,
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_PARALLEL],
+        'reciprocal' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_PARALLEL,
+            AbstractElement::TYPE_INDUCTION => Element::TYPE_PARALLEL,
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_SERIAL]
+    ];
+    /**
      * @var string
      */
     private $connectionType;
@@ -34,10 +47,13 @@ class Element
      * @var Calculator
      */
     private $calculator;
+    /**
+     * @var number
+     */
     private $setsValue;
 
     /**
-     * @return mixed
+     * @return number
      */
     public function getSetsValue()
     {
@@ -54,25 +70,64 @@ class Element
     }
 
     /**
+     * Dependably on element-connection and type of elements, it chooses which calculation use for this elements set
+     *
+     * @return number
+     *
+     */
+    public function calculate()
+    {
+
+        $keys = array_keys(self::$howToCalculate);
+
+        //In human language it looks like this: call_user_func_array(array($calculatorInstance, 'strait/reciprocal'), array($value1, $value2));
+        $result = call_user_func_array(array($this->calculator,
+                $keys[array_search($this->connectionType, array_column(self::$howToCalculate, $this->abstractType))])
+            , $this->elementsInSet);
+
+//        switch ($this->abstractType) {
+//            case AbstractElement::TYPE_RESISTANCE:
+//            case AbstractElement::TYPE_INDUCTION:
+//                if ($this->connectionType == self::TYPE_SERIAL) {
+//                    $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
+//                } else {
+//                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
+//
+//                }
+//                break;
+//            case AbstractElement::TYPE_CAPACITY:
+//                if ($this->connectionType == self::TYPE_SERIAL) {
+//                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
+//
+//                } else {
+//                    $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
+//
+//                }
+//                break;
+//            Default:
+//                throw new InvalidArgumentException;
+//                break;
+//
+//        }
+        $this->setsValue = $result;
+        return $result;
+    }
+
+    /**
      * Element constructor.
      * @param string $connectionType
      * @param string $abstractType
+     * @throws \ReflectionException
      */
     public function __construct($connectionType, $abstractType)
     {
-        $elementReflection = new \ReflectionClass(self::class);
-        if (!in_array($connectionType, $elementReflection->getConstants())) {
-            throw new InvalidArgumentException;
-        }
-        $abstractElementReflection = new \ReflectionClass(AbstractElement::class);
-        if (!in_array($abstractType, $abstractElementReflection->getConstants())) {
-            throw new InvalidArgumentException;
-        }
+        $this->elementValidator($connectionType, $abstractType);
 
         $this->connectionType = $connectionType;
         $this->abstractType = $abstractType;
         $this->calculator = new Calculator();
     }
+
 
     /**
      * @param AbstractElement $element
@@ -82,45 +137,26 @@ class Element
     public function attach(AbstractElement $element)
     {
         if ($element->getType() !== $this->abstractType) {
-            throw new UnsupportedElementException('what?');
+            throw new UnsupportedElementException('Unsupported element');
         }
         $this->elementsInSet[] = $element->getValue();
         return $this;
     }
 
     /**
-     * Dependly on element-connection and type of elements, calculate value for this elements set
+     * @param $connectionType
+     * @param $abstractType
+     * @throws \ReflectionException
      */
-    public function calculate()
+    private function elementValidator($connectionType, $abstractType)
     {
-        switch ($this->abstractType) {
-            case AbstractElement::TYPE_RESISTANCE:
-            case AbstractElement::TYPE_INDUCTION:
-                if ($this->connectionType == self::TYPE_SERIAL) {
-                   $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
-                } else {
-                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
-
-                }
-                break;
-            case AbstractElement::TYPE_CAPACITY:
-                if ($this->connectionType == self::TYPE_SERIAL) {
-                    //$this->calculator->reciprocal($this->elementsSet);
-                    $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->elementsInSet);
-
-                } else {
-                   // $this->calculator->strait($this->elementsSet);
-                    $result = call_user_func_array(array($this->calculator, 'strait'), $this->elementsInSet);
-
-                }
-                break;
-            Default:
-                throw new InvalidArgumentException;
-                break;
-
+        $elementReflection = new \ReflectionClass(self::class);
+        if (!in_array($connectionType, $elementReflection->getConstants())) {
+            throw new InvalidArgumentException('You must put an existing connection type');
         }
-        $this->setsValue = $result;
-        //echo $result.'lol';
-        return $result;
+        $abstractElementReflection = new \ReflectionClass(AbstractElement::class);
+        if (!in_array($abstractType, $abstractElementReflection->getConstants())) {
+            throw new InvalidArgumentException('You must put an existing element type');
+        }
     }
 }

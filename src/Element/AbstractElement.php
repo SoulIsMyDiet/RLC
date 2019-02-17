@@ -49,5 +49,5 @@ abstract class AbstractElement
     {
         return $this->type;
     }
-    
+
 }
