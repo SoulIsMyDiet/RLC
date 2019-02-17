@@ -9,10 +9,7 @@ namespace Recruitment\Element;
  */
 class Resistor extends AbstractElement
 {
-    /**
-     * @var int
-     */
-   // private $value;
+
     /**
      * @var string
      */
@@ -35,8 +32,8 @@ class Resistor extends AbstractElement
      */
     private function resistorValidator($value)
     {
-        if($value < 0){
-            throw new \InvalidArgumentException;
+        if ($value < 0) {
+            throw new \InvalidArgumentException('Resistor can not have negative value');
         }
     }
 

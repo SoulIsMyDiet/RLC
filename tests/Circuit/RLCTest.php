@@ -26,7 +26,7 @@ class RLCTest extends TestCase
 
     /**
      * @test
-     */
+     *//**/
     public function attachElementTest()
     {
         $rlc = new RLC();

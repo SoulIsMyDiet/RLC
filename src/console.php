@@ -22,22 +22,32 @@ try {
 
 //$item = new \Recruitment\Element\Capacitor(-1);
 
-    $rlc = new RLC();
+//    $rlc = new RLC();
+//
+//    $resistance = new Element(Element::TYPE_SERIAL, AbstractElement::TYPE_RESISTANCE);
+//    $resistance->attach(new Resistor(1))->attach(new Resistor(2))->attach(new Resistor(3));
+//
+//    $induction = new Element(Element::TYPE_SERIAL, AbstractElement::TYPE_INDUCTION);
+//    $induction->attach(new Coil(1))->attach(new Coil(2))->attach(new Coil(3));
+//
+//    $capacity = new Element(Element::TYPE_PARALLEL, AbstractElement::TYPE_CAPACITY);
+//    $capacity->attach(new Capacitor(1))->attach(new Capacitor(2))->attach(new Capacitor(3));
+//
+//    $rlc->attachElement($resistance)->attachElement($induction)->attachElement($capacity)
+//        ->attachElement($resistance)->attachElement($induction)->attachElement($capacity);
+//
+//    echo $rlc->getResistance();
+    $howToCalculate = [
+        'strait' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_SERIAL,
+            AbstractElement::TYPE_INDUCTION => Element::TYPE_SERIAL,
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_PARALLEL],
+        'reciprocal' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_PARALLEL,
+            AbstractElement::TYPE_INDUCTION => Element::TYPE_PARALLEL,
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_SERIAL]
 
-    $resistance = new Element(Element::TYPE_SERIAL, AbstractElement::TYPE_RESISTANCE);
-    $resistance->attach(new Resistor(1))->attach(new Resistor(2))->attach(new Resistor(3));
-
-    $induction = new Element(Element::TYPE_SERIAL, AbstractElement::TYPE_INDUCTION);
-    $induction->attach(new Coil(1))->attach(new Coil(2))->attach(new Coil(3));
-
-    $capacity = new Element(Element::TYPE_PARALLEL, AbstractElement::TYPE_CAPACITY);
-    $capacity->attach(new Capacitor(1))->attach(new Capacitor(2))->attach(new Capacitor(3));
-
-    $rlc->attachElement($resistance)->attachElement($induction)->attachElement($capacity)
-        ->attachElement($resistance)->attachElement($induction)->attachElement($capacity);
-
-    echo $rlc->getResistance();
-
+    ];
+    $keys = array_keys($howToCalculate);
+   echo $keys[array_search('S',array_column($howToCalculate, 'C'))];
 
 //$element->attach($item);
 }catch (Exception $e){

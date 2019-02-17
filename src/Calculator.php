@@ -6,13 +6,13 @@ class Calculator
 {
     /**
      * @param number ...$numbers
-     * @return int|mixed
+     * @return number
      */
-    public function strait(...$numbers){
+    public function strait(...$numbers)
+    {
 
         $result = 0;
         foreach ($numbers as $number) {
-            //var_dump($number);
             $result += $number;
         }
         return $result;
@@ -21,16 +21,17 @@ class Calculator
 
     /**
      * @param number ...$numbers
-     * @return float|int
+     * @return number
      */
-    public function reciprocal(...$numbers){
+    public function reciprocal(...$numbers)
+    {
         $result = 0;
         foreach ($numbers as $number) {
-            if($number === 0){
-                return 0;//pomyslec o jakims exceptionie
+            if ($number === 0) {
+                return 0;
             }
-            $result += 1/$number;
+            $result += 1 / $number;
         }
-        return 1/$result;
+        return 1 / $result;
     }
 }

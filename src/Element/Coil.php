@@ -9,10 +9,7 @@ namespace Recruitment\Element;
  */
 class Coil extends AbstractElement
 {
-    /**
-     * @var int
-     */
-   // private $value;
+
     /**
      * @var string
      */
@@ -35,8 +32,8 @@ class Coil extends AbstractElement
      */
     private function coilValidator($value)
     {
-        if($value < 0){
-            throw new \InvalidArgumentException;
+        if ($value < 0) {
+            throw new \InvalidArgumentException('Coil can not have negative value');
         }
     }
 }
