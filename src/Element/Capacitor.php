@@ -41,10 +41,10 @@ class Capacitor extends AbstractElement
     private function capacitorValidator($value)
     {
         if($value < 0){
-            throw new \InvalidArgumentException;
+            throw new \InvalidArgumentException('The capacitor can not have negative value');
         }
         if ($value == null){
-            throw new NullCapacitorException;
+            throw new NullCapacitorException('The capacitor can not be empty');
         }
     }
 }

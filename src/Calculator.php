@@ -9,8 +9,10 @@ class Calculator
      * @return int|mixed
      */
     public function strait(...$numbers){
+
         $result = 0;
         foreach ($numbers as $number) {
+            //var_dump($number);
             $result += $number;
         }
         return $result;
