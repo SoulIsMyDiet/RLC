@@ -24,6 +24,7 @@ class Capacitor extends AbstractElement
      */
     public function __construct($value)
     {
+        parent::__construct($value);
         $this->capacitorValidator($value);
         $this->value = $value;
     }

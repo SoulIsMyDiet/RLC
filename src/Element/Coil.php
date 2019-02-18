@@ -21,6 +21,7 @@ class Coil extends AbstractElement
      */
     public function __construct($value)
     {
+        parent::__construct($value);
         $this->coilValidator($value);
         $this->value = $value;
 

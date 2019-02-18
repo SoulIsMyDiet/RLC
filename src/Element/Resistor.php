@@ -15,12 +15,14 @@ class Resistor extends AbstractElement
      */
     protected $type = AbstractElement::TYPE_RESISTANCE;
 
+
     /**
-     * Coil constructor.
+     * Resistor constructor.
      * @param number $value
      */
     public function __construct($value)
     {
+        parent::__construct($value);
         $this->resistorValidator($value);
         $this->value = $value;
 
