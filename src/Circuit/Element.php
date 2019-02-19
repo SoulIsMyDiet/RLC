@@ -24,12 +24,16 @@ class Element
      * @var array
      */
     public static $howToCalculate = [
-        'strait' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_SERIAL,
+        'strait' => [
+            AbstractElement::TYPE_RESISTANCE => Element::TYPE_SERIAL,
             AbstractElement::TYPE_INDUCTION => Element::TYPE_SERIAL,
-            AbstractElement::TYPE_CAPACITY => Element::TYPE_PARALLEL],
-        'reciprocal' => [AbstractElement::TYPE_RESISTANCE => Element::TYPE_PARALLEL,
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_PARALLEL
+        ],
+        'reciprocal' => [
+            AbstractElement::TYPE_RESISTANCE => Element::TYPE_PARALLEL,
             AbstractElement::TYPE_INDUCTION => Element::TYPE_PARALLEL,
-            AbstractElement::TYPE_CAPACITY => Element::TYPE_SERIAL]
+            AbstractElement::TYPE_CAPACITY => Element::TYPE_SERIAL
+        ]
     ];
     /**
      * @var string
@@ -159,4 +163,5 @@ class Element
             throw new InvalidArgumentException('You must put an existing element type');
         }
     }
+
 }

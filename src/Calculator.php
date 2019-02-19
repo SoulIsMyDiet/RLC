@@ -2,6 +2,10 @@
 
 namespace Recruitment;
 
+/**
+ * Class Calculator
+ * @package Recruitment
+ */
 class Calculator
 {
     /**
@@ -34,4 +38,5 @@ class Calculator
         }
         return 1 / $result;
     }
+
 }
