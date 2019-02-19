@@ -46,12 +46,10 @@ class RLC
      */
     public function getResistance()
     {
-        if (!array_key_exists(AbstractElement::TYPE_RESISTANCE, $this->sets)) {
+        if (!isset($this->sets[AbstractElement::TYPE_RESISTANCE])) {
             return 0;
         }
-        $result = call_user_func_array(array($this->calculator, 'strait'), $this->sets[AbstractElement::TYPE_RESISTANCE]);
-
-        return $result;
+        return call_user_func_array(array($this->calculator, 'strait'), $this->sets[AbstractElement::TYPE_RESISTANCE]);
     }
 
     /**
@@ -59,12 +57,10 @@ class RLC
      */
     public function getInduction()
     {
-        if (!array_key_exists(AbstractElement::TYPE_INDUCTION, $this->sets)) {
+        if (!isset($this->sets[AbstractElement::TYPE_INDUCTION])) {
             return 0;
         }
-        $result = call_user_func_array(array($this->calculator, 'strait'), $this->sets[AbstractElement::TYPE_INDUCTION]);
-
-        return $result;
+        return call_user_func_array(array($this->calculator, 'strait'), $this->sets[AbstractElement::TYPE_INDUCTION]);
     }
 
     /**
@@ -72,11 +68,11 @@ class RLC
      */
     public function getCapacity()
     {
-        if (!array_key_exists(AbstractElement::TYPE_CAPACITY, $this->sets)) {
+        if (!isset($this->sets[AbstractElement::TYPE_CAPACITY])) {
+
             return null;
         }
-        $result = call_user_func_array(array($this->calculator, 'reciprocal'), $this->sets[AbstractElement::TYPE_CAPACITY]);
-
-        return $result;
+        return call_user_func_array(array($this->calculator, 'reciprocal'), $this->sets[AbstractElement::TYPE_CAPACITY]);
     }
+
 }

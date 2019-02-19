@@ -16,4 +16,5 @@ class NullCapacitorException extends \Exception
         parent::__construct($message);
 
     }
+
 }

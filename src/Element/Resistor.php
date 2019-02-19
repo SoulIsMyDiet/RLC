@@ -35,9 +35,8 @@ class Resistor extends AbstractElement
     private function resistorValidator($value)
     {
         if ($value < 0) {
-            throw new \InvalidArgumentException('Resistor can not have negative value');
+            throw new \InvalidArgumentException('Resistor cannot have negative value');
         }
     }
-
 
 }

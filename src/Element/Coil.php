@@ -34,7 +34,8 @@ class Coil extends AbstractElement
     private function coilValidator($value)
     {
         if ($value < 0) {
-            throw new \InvalidArgumentException('Coil can not have negative value');
+            throw new \InvalidArgumentException('Coil cannot have negative value');
         }
     }
+
 }
